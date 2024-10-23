@@ -1,0 +1,4 @@
+.idea/
+include/entt
+include/nlohmann/
+cmake-build-debug/
