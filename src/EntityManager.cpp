@@ -6,7 +6,7 @@
 
 entt::entity EntityManager::createPlayer(entt::registry &registry)
 {
-    Rect worldRepr = Rect{SDL_Rect{ 100,100,TILE_SIZE,TILE_SIZE }};
+    Rect worldRepr = Rect{SDL_Rect{ 384,256,TILE_SIZE,TILE_SIZE }};
     Texture texture = Texture{
         "player",
         SDL_Rect{0,0,PLAYER_SPRITE_SIZE,PLAYER_SPRITE_SIZE}
