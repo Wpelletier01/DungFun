@@ -33,7 +33,7 @@ int App::init(int screenW, int screenH, const char *title)
     }
 
 
-    if (this->renderer.init(this->window) > 0) {
+    if (this->renderer.init(this->window,&this->registry) > 0) {
         SDL_LogError(0,"Couldn't initialize the renderer: '%s'",SDL_GetError());
         return 1;
     }
@@ -45,6 +45,8 @@ int App::init(int screenW, int screenH, const char *title)
 
     this->screen_h = screenH;
     this->screen_w = screenW;
+
+    this->camera.setSize(screenW,screenH);
 
     return 0;
 
@@ -96,7 +98,11 @@ void App::handleEvents(SDL_Event *event)
 
 void App::update(entt::entity player)
 {
+    // update player position
     handlePlayerMove(player);
+    // update camera
+    auto&[r] = this->registry.get<Rect>(player);
+    this->camera.updatePosition(r);
 
 
 }
@@ -104,7 +110,11 @@ void App::update(entt::entity player)
 void App::render()
 {
     this->renderer.clear();
-    this->renderer.renderAll(this->registry,this->assetManager.getTextures(),&this->world);
+    this->renderer.renderAll(
+        this->assetManager.getTextures(),
+        &this->world,
+        this->camera.getRect()
+        );
     this->renderer.present();
 }
 
