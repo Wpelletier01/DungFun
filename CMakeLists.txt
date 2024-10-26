@@ -26,7 +26,9 @@ add_executable(DungFun main.cpp
         src/Renderer.cpp
         include/libgame/World.h
         src/World.cpp
-        include/libgame/Declaration.h)
+        include/libgame/Declaration.h
+        include/libgame/Camera.h
+        src/Camera.cpp)
 
 target_include_directories(DungFun PUBLIC include/libgame include/entt include/nlohmann ${SDL2_INCLUDE_DIRS})
 target_link_libraries(DungFun ${SDL2_LIBRARIES} SDL2_image)
