@@ -5,6 +5,7 @@
 #include <SDL_video.h>
 #include "Renderer.h"
 #include "AssetManager.h"
+#include "Camera.h"
 
 namespace fs = std::filesystem;
 
@@ -28,6 +29,7 @@ private:
     AssetManager assetManager;
     entt::registry registry;
     World world = World("test-1.json");
+    Camera camera;
     int screen_w, screen_h;
 };
 
