@@ -8,17 +8,25 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(include)
 
 # Automatically find all source files in the src directory
-file(GLOB_RECURSE SOURCES "src/libgame/**/*.cpp" "src/libgame/*.cpp")
+# file(GLOB_RECURSE sources "src/libgame/**/*.cpp" "src/libgame/*.cpp")
 
 # Automatically find all header files in the include/my_lib directory
-file(GLOB_RECURSE HEADERS "include/libgame/**/*.h" "include/libgame/*.h" "include/**/*.hpp" )
+# file(GLOB_RECURSE headers "include/libgame/**/*.h" "include/libgame/*.h" "include/**/*.hpp" )
 
 # Required lib
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(GLEW REQUIRED)
 
 
-add_executable(DungFun main.cpp ${SOURCES} ${HEADERS})
+add_executable(DungFun main.cpp
+        src/App.cpp
+        src/AssetManager.cpp
+        src/EntityManager.cpp
+        src/Renderer.cpp
+        include/libgame/World.h
+        src/World.cpp
+        include/libgame/Declaration.h)
 
 target_include_directories(DungFun PUBLIC include/libgame include/entt include/nlohmann ${SDL2_INCLUDE_DIRS})
 target_link_libraries(DungFun ${SDL2_LIBRARIES} SDL2_image)
