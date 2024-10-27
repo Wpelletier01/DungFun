@@ -17,6 +17,7 @@ entt::entity EntityManager::createPlayer(entt::registry &registry)
     registry.emplace<Rect>(id, worldRepr);
     registry.emplace<Texture>(id, texture);
     registry.emplace<Speed>(id, Speed{5.0});
+    registry.emplace<Solidity>(id,  Solidity{true});
 
     return id;
 }
