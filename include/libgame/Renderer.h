@@ -4,7 +4,7 @@
 #include <SDL_render.h>
 #include <SDL_video.h>
 #include "entt.hpp"
-#include "World.h"
+#include "world/TileMap.h"
 
 using TexRegister = std::unordered_map<std::string, SDL_Texture*>&;
 
@@ -13,7 +13,7 @@ public:
     ~Renderer();
     int init(SDL_Window* win, entt::registry* registry);
     void clear() const;
-    void renderAll(TexRegister& textures, World* world, SDL_Rect& camera);
+    void renderAll(TexRegister& textures, TileMap& tileMap, SDL_Rect& camera);
     void present() const;
     void setViewport(int x, int y);
     SDL_Renderer* getpSDLRenderer() const;

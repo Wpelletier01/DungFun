@@ -30,30 +30,23 @@ void Renderer::clear() const
     SDL_RenderClear(this->m_renderer);
 }
 
-void Renderer::renderAll(TexRegister textures, World* world, SDL_Rect& camera)
+void Renderer::renderAll(TexRegister textures, TileMap& tileMap, SDL_Rect& camera)
 {
 
     SDL_Rect scrnDest = SDL_Rect{0,0,TILE_SIZE,TILE_SIZE};
 
     // render world (level)
 
-    SDL_Rect* worldBoundaries = world->getRect();
-    SDL_Rect worldPos = SDL_Rect{0,0,TILE_SIZE,TILE_SIZE};
+    for(int y = 0; y < tileMap.getWidth(); y++) {
+        for (int x = 0; x < tileMap.getHeight(); x++) {
+            auto tile = tileMap.getTileAt(x,y);
 
-
-    auto tiles = world->getTilesSrc();
-    auto tileMap = world->getTilesMap();
-
-    for(int y = 0; y < worldBoundaries->h; y++) {
-        worldPos.y = y * TILE_SIZE;
-        for (int x = 0; x < worldBoundaries->w; x++) {
-            worldPos.x = x*TILE_SIZE;
-            scrnDest.x = worldPos.x - camera.x;
-            scrnDest.y = worldPos.y - camera.y;
+            scrnDest.x = tile.rect.x - camera.x;
+            scrnDest.y = tile.rect.y - camera.y;
 
             SDL_RenderCopy(
                 this->m_renderer,
-                textures[tiles[tileMap[y*(worldBoundaries->w)+x]]],
+                textures[tile.texture],
                 nullptr,
                 &scrnDest
             );
