@@ -38,6 +38,8 @@ int AssetManager::init(const fs::path &imgAssetDir, SDL_Renderer *renderer)
 
     }
 
+
+
     return 0;
 }
 
