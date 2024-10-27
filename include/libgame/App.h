@@ -1,5 +1,6 @@
 #ifndef APP_H
 #define APP_H
+
 #include <filesystem>
 #include <SDL_events.h>
 #include <SDL_video.h>
@@ -15,6 +16,7 @@ class App {
 public:
     ~App();
     int init(int screenW, int screenH, const char* title);
+    void loadLevel(std::string name);
     void run();
 private:
     void handleEvents(SDL_Event* event);
@@ -24,11 +26,12 @@ private:
     void handlePlayerMove(entt::entity player);
 
     bool running = false;
+
     SDL_Window* window = nullptr;
     Renderer renderer;
     AssetManager assetManager;
+    TileMap tileMap;
     entt::registry registry;
-    World world = World("test-1.json");
     Camera camera;
     int screen_w, screen_h;
 };

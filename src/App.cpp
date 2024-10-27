@@ -2,9 +2,13 @@
 
 #include <Component.h>
 #include <EntityManager.h>
+#include <fstream>
+#include <json.hpp>
 #include <SDL.h>
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
+
+#include "Declaration.h"
 
 
 App::~App()
@@ -52,8 +56,72 @@ int App::init(int screenW, int screenH, const char *title)
 
 }
 
+void App::loadLevel(std::string name)
+{
+    std::vector<std::string> textures;
+    std::vector<int> texIndice;
+
+    fs::path config = fs::path("../assets/levels/" + name);
+
+    // For index 0 (which mean no tiles)
+    textures.push_back("null-128");
+
+    std::ifstream input(config);
+
+    if (!input.is_open()) {
+        SDL_LogError(0, "couldn't open tilemap '%s'",config.c_str());
+    }
+
+    nlohmann::json data;
+
+    try {
+        input >> data;
+    } catch (const nlohmann::json::parse_error& e) {
+        SDL_LogError(0,"Couldn't parse json: %s", e.what());
+        return;
+    }
+
+    // collect width and height
+    int w = data["width"];
+    int h = data["height"];
+
+    auto tilesets = data["tilesets"];
+
+    if (!tilesets.is_array()) {
+        SDL_LogError(0, "element 'tilesets' should be of type array");
+        return;
+    }
+
+    for (const auto& t : tilesets) {
+        textures.push_back(t["name"]);
+    }
+
+    // load layer (only one for now)
+
+    auto layers = data["layers"];
+
+    if (!layers.is_array()) {
+        SDL_LogError(0, "element 'layers' should be of type array");
+        return;
+    }
+
+    for (const auto& l: layers) {
+        for (const auto& i : l["data"]) {
+            texIndice.push_back(i);
+        }
+    }
+
+    input.close();
+
+    this->tileMap = TileMap(textures,texIndice,TILE_SIZE,w,h);
+
+}
+
 void App::run()
 {
+
+    this->loadLevel("test-1.json");
+
     SDL_Event event;
     this->running = true;
 
@@ -62,19 +130,16 @@ void App::run()
     // for limiting frame rate to 60fps
     constexpr int fps = 60;
     constexpr int frameDelay = 1000 / fps;
-    Uint32 frameStart;
-    int frameTime;
 
     while (this->running) {
 
-        frameStart = SDL_GetTicks();
+        Uint32 frameStart = SDL_GetTicks();
 
         this->handleEvents(&event);
         this->update(player);
         this->render();
 
-        frameTime = SDL_GetTicks() - frameStart;
-        if (frameDelay > frameTime) {
+        if (const int frameTime = SDL_GetTicks() - frameStart; frameDelay > frameTime) {
             SDL_Delay(frameDelay-frameTime);
         }
     }
@@ -112,7 +177,7 @@ void App::render()
     this->renderer.clear();
     this->renderer.renderAll(
         this->assetManager.getTextures(),
-        &this->world,
+        this->tileMap,
         this->camera.getRect()
         );
     this->renderer.present();
