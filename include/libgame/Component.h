@@ -3,20 +3,29 @@
 
 #include <string>
 
-struct Rect {
+struct Rect
+{
     SDL_Rect r;
 };
 
-struct Texture {
+struct Texture
+{
     // name of the texture
     std::string id;
     // position on the source image
     SDL_Rect src;
 };
 
-struct Speed {
+struct Speed
+{
     float s;
 };
+
+struct Solidity
+{
+    bool solid;
+};
+
 
 
 #endif //COMPONENT_H
