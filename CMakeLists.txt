@@ -24,11 +24,16 @@ add_executable(DungFun main.cpp
         src/AssetManager.cpp
         src/EntityManager.cpp
         src/Renderer.cpp
-        include/libgame/World.h
-        src/World.cpp
         include/libgame/Declaration.h
         include/libgame/Camera.h
-        src/Camera.cpp)
+        src/Camera.cpp
+        include/libgame/system/System.h
+        include/libgame/system/Collision.h
+        src/system/Collision.cpp
+        include/libgame/world/Tile.h
+        src/world/Tile.cpp
+        include/libgame/world/TileMap.h
+        src/world/TileMap.cpp)
 
 target_include_directories(DungFun PUBLIC include/libgame include/entt include/nlohmann ${SDL2_INCLUDE_DIRS})
 target_link_libraries(DungFun ${SDL2_LIBRARIES} SDL2_image)
